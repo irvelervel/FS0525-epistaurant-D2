@@ -35,6 +35,41 @@ class BookATable extends Component {
       dateTime: '',
       specialRequests: '',
     },
+    // esempio per classe condizionale
+    // selected: true,
+  }
+
+  sendBooking = () => {
+    console.log('invio i dati alle API', this.state.booking)
+    const URL = 'https://striveschool-api.herokuapp.com/api/reservation'
+    fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(this.state.booking),
+      headers: {
+        'Content-Type': 'application/json', // metodi POST e PUT
+      },
+    })
+      .then((r) => {
+        if (r.ok) {
+          alert('Prenotazione salvata correttamente!')
+          // svuoto il form: RESETTO LO STATO
+          this.setState({
+            booking: {
+              name: '',
+              phone: '',
+              numberOfPeople: '1',
+              smoking: false,
+              dateTime: '',
+              specialRequests: '',
+            },
+          })
+        } else {
+          throw new Error('errore nella response', r.status)
+        }
+      })
+      .catch((e) => {
+        alert('ERRORE IN INVIO DELLA PRENOTAZIONE', e)
+      })
   }
 
   // ora colleghiamo i campi del FORM alle diverse proprietà
@@ -46,12 +81,20 @@ class BookATable extends Component {
 
   render() {
     return (
-      <Container>
+      <Container
+      // esempio classe condizionale
+      // className={this.state.selected === true ? 'border border-danger' : ''}
+      >
         <Row className="justify-content-center">
           <Col xs={12} md={6}>
             <h2 className="text-center my-3">Prenota un Tavolo!</h2>
             {/* form */}
-            <Form>
+            <Form
+              onSubmit={(e) => {
+                e.preventDefault()
+                this.sendBooking() // sotto THIS perchè siamo in una classe
+              }}
+            >
               <Form.Group className="mb-3">
                 <Form.Label>Nome prenotazione</Form.Label>
                 <Form.Control
