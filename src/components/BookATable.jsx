@@ -18,6 +18,32 @@ import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 // specialRequests --> string, opzionale
 
 class BookATable extends Component {
+  // in QUALSIASI form in React, quello che cambia è l'approccio:
+  // noi NON COLLEZIONEREMO i valori degli input all'invio del form...
+  // ...i valori dei campi del form verranno CONTINUAMENTE salvati nello stato
+  // quindi non ci sarà più necessità di raccogliere le informazioni inserite
+  // nella fase di submit
+
+  state = {
+    booking: {
+      // questi valori iniziali saranno quelli che andranno
+      // a riempire i singoli campi del form all'avvio della pagina
+      name: '',
+      phone: '',
+      numberOfPeople: '1',
+      smoking: false,
+      dateTime: '',
+      specialRequests: '',
+    },
+  }
+
+  // ora colleghiamo i campi del FORM alle diverse proprietà
+  // dello STATO del componente. In react questa operazione si chiama:
+  // TWO-WAY DATA BINDING
+
+  // questa procedura in React va fatta per OGNI campo input in qualsiasi
+  // situazione
+
   render() {
     return (
       <Container>
@@ -28,17 +54,58 @@ class BookATable extends Component {
             <Form>
               <Form.Group className="mb-3">
                 <Form.Label>Nome prenotazione</Form.Label>
-                <Form.Control type="text" placeholder="Giangiorgio" required />
+                <Form.Control
+                  type="text"
+                  placeholder="Giangiorgio"
+                  value={this.state.booking.name} // '' ???
+                  onChange={(e) => {
+                    // questa funzione dovrà, ad ogni pressione
+                    // di un tasto dentro un input, mantenere aggiornata
+                    // la proprietà collegata a questo input nello state
+                    this.setState({
+                      booking: {
+                        ...this.state.booking, // mi copio in questo oggetto
+                        // TUTTI i valori esistenti, e poi sovrascrivo "name"
+                        name: e.target.value, // il valore dell'input
+                      },
+                    })
+                  }}
+                  required
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Numero di telefono</Form.Label>
-                <Form.Control type="tel" required />
+                <Form.Control
+                  type="tel"
+                  required
+                  value={this.state.booking.phone}
+                  onChange={(e) => {
+                    this.setState({
+                      booking: {
+                        ...this.state.booking, // mi copio in questo oggetto
+                        // TUTTI i valori esistenti, e poi sovrascrivo "phone"
+                        phone: e.target.value,
+                      },
+                    })
+                  }}
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>In quanti siete</Form.Label>
-                <Form.Select aria-label="number of people">
+                <Form.Select
+                  aria-label="number of people"
+                  value={this.state.booking.numberOfPeople}
+                  onChange={(e) => {
+                    this.setState({
+                      booking: {
+                        ...this.state.booking,
+                        numberOfPeople: e.target.value,
+                      },
+                    })
+                  }}
+                >
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -49,17 +116,53 @@ class BookATable extends Component {
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Tavolo fumatori" />
+                <Form.Check
+                  type="checkbox"
+                  label="Tavolo fumatori"
+                  checked={this.state.booking.smoking}
+                  onChange={(e) => {
+                    this.setState({
+                      booking: {
+                        ...this.state.booking,
+                        smoking: e.target.checked,
+                      },
+                    })
+                  }}
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Data e ora</Form.Label>
-                <Form.Control type="datetime-local" required />
+                <Form.Control
+                  type="datetime-local"
+                  required
+                  value={this.state.booking.dateTime}
+                  onChange={(e) => {
+                    this.setState({
+                      booking: {
+                        ...this.state.booking,
+                        dateTime: e.target.value,
+                      },
+                    })
+                  }}
+                />
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Allergie/cani/bambini</Form.Label>
-                <Form.Control as="textarea" rows={5} />
+                <Form.Control
+                  as="textarea"
+                  rows={5}
+                  value={this.state.booking.specialRequests}
+                  onChange={(e) => {
+                    this.setState({
+                      booking: {
+                        ...this.state.booking,
+                        specialRequests: e.target.value,
+                      },
+                    })
+                  }}
+                />
               </Form.Group>
 
               <Button variant="success" type="submit">
@@ -74,3 +177,17 @@ class BookATable extends Component {
 }
 
 export default BookATable
+
+// const lucio1 = {
+//   name: 'Lucio',
+//   age: 20,
+// }
+
+// const lucio2 = {
+//   ...lucio1, // sta portando in lucio2 name e age
+//   city: 'Rome',
+// }
+
+// const lucio3 = {
+//     ...lucio2,
+// }
