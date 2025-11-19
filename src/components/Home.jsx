@@ -36,7 +36,7 @@ class Home extends Component {
             {/* il valore di una prop va tra " " se è una stringa, o
         tra { } se è qualsiasi valore NON stringa */}
             <Carousel
-              onSlide={(i) => {
+              onSlid={(i) => {
                 console.log('SLIDE CAMBIATA', i)
                 // con questo indice io voglio andare a cambiare quale elemento
                 // dell'array pastasciutte verrà salvato dentro lo stato
